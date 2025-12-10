@@ -19,9 +19,9 @@ public class Main{
         Pajaro p = new Pajaro(tunel);
         Mono m = new Mono("Wukong", liana1, liana2, liana3, liana4, liana5);
         Mono m2 = new Mono("Caramelo", liana1, liana2, liana3, liana4, liana5);
-        //t.start();
-        //l.start();
-        //p.start();
+        t.start();
+        l.start();
+        p.start();
         m.start();
         m2.start();
 }
