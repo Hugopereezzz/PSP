@@ -2,7 +2,8 @@ import java.util.concurrent.Semaphore;
 
 public class Main{
 
-    static final int META = 300;
+    final static int META = 300;
+    static boolean viento;
 
     public static void main(String[] args) {
 
@@ -18,14 +19,39 @@ public class Main{
         Liebre l = new Liebre(tunel);
         Pajaro p = new Pajaro(tunel);
         Mono m = new Mono("Wukong", liana1, liana2, liana3, liana4, liana5);
-        Mono m2 = new Mono("Caramelo", liana1, liana2, liana3, liana4, liana5);
-        t.start();
+        Mono m2 = new Mono("Lamine Yamal", liana1, liana2, liana3, liana4, liana5);
+        Viento v = new Viento();
+        //t.start();
         l.start();
-        p.start();
-        m.start();
-        m2.start();
+        //p.start();
+        //m.start();
+        //m2.start();
+        v.start();
 }
 }
+
+class Viento extends Thread {
+
+    @Override
+    public void run(){
+        try {
+            while (true){
+
+                Main.viento = Math.random() < 0.3; //solo 30% de que haya viento
+
+                if (Main.viento){
+                    System.out.println("Hay viento");
+                }
+
+                Thread.sleep(1000);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+    }
+
+}
+
 
 class Mono extends Thread {
     int posicion=0;
@@ -57,9 +83,9 @@ class Mono extends Thread {
                 posicion+=velocidad;
                 System.out.println(nombre +" Posicion: " + posicion + " m");
 
-                if (posicion >= 60 && posicion - velocidad < 60) {
-                liana1.release();
-                System.out.println(nombre +" baja de la liana 1");
+                if (posicion >= 60 && posicion - velocidad < 60) {     //posicion - velocidad < 60 para que solo salga 1 vez de la primea liana
+                liana1.release();                                      // ya que sino al ser la posicion siempre mas de 60 una vez que la pase,
+                System.out.println(nombre +" baja de la liana 1");     // va a estar saliendo siempre de la liana 1 y no avanza el programa
                 liana2.acquire();
                 System.out.println(nombre +" sube a la liana 2");
                 }
@@ -144,7 +170,7 @@ class Tortuga extends Thread {
     }
 }
 
-class Liebre extends Thread{
+class Liebre extends Thread{      //el viento esta mal implementado ya que no despierta a la liebre ns pq
     int posicion=0;
     int velocidad=5;
 
@@ -160,21 +186,27 @@ class Liebre extends Thread{
     public void run() {
         try {
             while(posicion < Main.META){
-                 for (int i = 0; i < 4; i++) {
+
+                for (int i = 0; i < 4; i++) {
                 posicion += velocidad;
                 pasarTunel();
                 System.out.println("Liebre: " + posicion + " m");
                 Thread.sleep(1000);
                 }
 
-            durmiendo = true;
-            System.out.println("La liebre esta durmiendo...");
-            Thread.sleep(10000);
-            durmiendo = false;
+                durmiendo = true;
+                System.out.println("La liebre esta durmiendo...");
+
+                if (!Main.viento){
+                    Thread.sleep(10000);
+                } else {
+                    durmiendo = false;
+                    System.out.println("La liebre se desperto");
+                }
                 
-            if (estaEnTunel){
+                if (estaEnTunel){
                 System.out.println("Liebre posicion (dentro del tunel): " + posicion + " m");
-            }
+                }
         }
         } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -219,12 +251,12 @@ class Pajaro extends Thread{
                 volando = Math.random() < 0.3;
 
                 if (volando){
-                    direccion = Math.random() < 0.1;
+                    direccion = Math.random() < 0.1;  //si esta volando 10% de que sea hacia atras
                 }
 
                 if (volando){
-                    if (posicion != 0 && direccion) {
-                    velocidad = -10;
+                    if (posicion != 0 && direccion) {  //si vuela hacia atras y la posicion no es 0,
+                    velocidad = -10;                   //va pa atras y sino pa alante ya que no puede tener posicion negativa
                     } else {
                     velocidad = 10;
                     }
