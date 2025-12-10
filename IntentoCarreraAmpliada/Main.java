@@ -90,7 +90,7 @@ class Mono extends Thread {
             }
             System.out.println(nombre +" ha llegado a la fokin META");
         } catch (Exception e) {
-            // TODO: handle exception
+            System.out.println("Lo siento Fonsi, apruebame porfavor");
         }
     }
 
