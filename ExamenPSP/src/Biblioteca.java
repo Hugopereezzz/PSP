@@ -55,7 +55,7 @@ public class Biblioteca {
             a9.join();
             a10.join();
         } catch (Exception e) {
-            // TODO: handle exception
+            
         }
     }
 

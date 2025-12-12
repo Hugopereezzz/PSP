@@ -138,9 +138,11 @@ class Cliente extends Thread{
                         this.lavadoraActual = lavadoras.get(k);
                     } catch (Exception e) {
                         System.out.println("Lo siento fonsi, apruebame");
+                        System.out.println("----------------------------------------------------------------------");
                     }
                     enLavadora=true;
                     System.out.println(nombre + " esta lavadondo ropa en la lavadora" + (k+1));
+                    System.out.println("----------------------------------------------------------------------");
 
                 }
             }
@@ -154,10 +156,12 @@ class Cliente extends Thread{
                 if(lavadoraActual.getId()==lavadoras.get(k).getId()){
                     lavadoras.get(k).getSemaforin().release();
                     System.out.println("Lavadora" + (k+1) + " esta libre");
+                    System.out.println("----------------------------------------------------------------------");
                     lavadoras.get(k).setEstaOcupada(false);
                     lavado=true;
                     enLavadora=false;
                     System.out.println(nombre + " ha terminao de lavar. Ha tardao " + velocidad + " segundos");
+                    System.out.println("----------------------------------------------------------------------");
                 }
             }
         }
