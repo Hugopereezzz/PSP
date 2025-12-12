@@ -11,9 +11,9 @@ public class App {
         Semaphore lavadora2 = new Semaphore(1);
         Semaphore lavadora3 = new Semaphore(1);
         
-        Lavadora s1 = new Lavadora(lavadora1);
-        Lavadora s2 = new Lavadora(lavadora2);
-        Lavadora s3 = new Lavadora(lavadora3);
+        Lavadora s1 = new Lavadora(lavadora1,1);
+        Lavadora s2 = new Lavadora(lavadora2,2);
+        Lavadora s3 = new Lavadora(lavadora3,3);
 
         List<Lavadora> lista = new ArrayList<Lavadora>();
 
@@ -65,11 +65,27 @@ class Lavadora{
     
     boolean estaOcupada;
     Semaphore semaforin;
+    int id;
     
-    public Lavadora ( Semaphore semaforin) {
+    public Lavadora ( Semaphore semaforin, int id) {
         this.estaOcupada = false;
         this.semaforin = semaforin;
+        this.id=id;
     }
+
+    
+
+    public int getId() {
+        return id;
+    }
+
+
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+
 
     public boolean isEstaOcupada() {
         return estaOcupada;
@@ -119,6 +135,7 @@ class Cliente extends Thread{
                     try {
                         lavadoras.get(k).getSemaforin().acquire();
                         lavadoras.get(k).setEstaOcupada(true);
+                        this.lavadoraActual = lavadoras.get(k);
                     } catch (Exception e) {
                         System.out.println("Lo siento fonsi, apruebame");
                     }
@@ -134,7 +151,7 @@ class Cliente extends Thread{
     public synchronized void sacarDeLavadora(){
         if(enLavadora){
             for(int k=0;k<lavadoras.size();k++){
-                if(lavadoras.get(k).isEstaOcupada()==true && enLavadora==true){
+                if(lavadoraActual.getId()==lavadoras.get(k).getId()){
                     lavadoras.get(k).getSemaforin().release();
                     System.out.println("Lavadora" + (k+1) + " esta libre");
                     lavadoras.get(k).setEstaOcupada(false);
